@@ -1,0 +1,282 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css'
+---
+
+<Layout title="Kalkulator Gerbang Logika">
+	<main class="bg-gradient-to-br from-indigo-100 to-purple-100 min-h-screen flex flex-col items-center py-10 px-4">
+		<h1 class="text-4xl font-bold text-center mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+			Kalkulator Gerbang Logika
+		</h1>
+		<p class="text-gray-600 mb-8 text-center">Bangun dan eksperimen dengan gerbang logika</p>
+		
+		<div class="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-full max-w-[800px] transition-all duration-300 hover:shadow-purple-200">
+			<!-- Bagian Input Dinamis -->
+			<div class="mb-8">
+				<div class="flex justify-between items-center mb-6">
+					<h2 class="text-xl font-semibold text-gray-800">Variabel Input</h2>
+					<button id="addInput" class="group relative bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+						<span class="flex items-center gap-2">
+							<svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+							</svg>
+							Tambah Input
+						</span>
+					</button>
+				</div>
+				<div id="inputContainer" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+					<!-- Input A Awal -->
+					<div class="input-group">
+						<div class="bg-white/60 backdrop-blur p-4 rounded-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-md">
+							<div class="flex items-center justify-between mb-2">
+								<label class="text-gray-700 font-medium">Input A</label>
+							</div>
+							<select class="w-full p-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all input-select" data-input-id="A">
+								<option value="false">False</option>
+								<option value="true">True</option>
+							</select>
+						</div>
+					</div>
+					
+					<!-- Input B Awal -->
+					<div class="input-group">
+						<div class="bg-white/60 backdrop-blur p-4 rounded-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-md">
+							<div class="flex items-center justify-between mb-2">
+								<label class="text-gray-700 font-medium">Input B</label>
+							</div>
+							<select class="w-full p-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all input-select" data-input-id="B">
+								<option value="false">False</option>
+								<option value="true">True</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Pemilihan Gerbang dengan Preview Interaktif -->
+			<div class="mb-8">
+				<label class="block text-gray-700 text-lg font-medium mb-3">Gerbang Logika</label>
+				<div class="flex gap-6 items-center">
+					<select id="gateSelect" class="flex-1 p-3 border border-gray-200 rounded-xl bg-white/50 backdrop-blur focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all">
+						<option value="AND">Gerbang DAN (AND)</option>
+						<option value="OR">Gerbang ATAU (OR)</option>
+						<option value="NOT">Gerbang TIDAK (NOT)</option>
+						<option value="NAND">Gerbang TIDAK-DAN (NAND)</option>
+						<option value="NOR">Gerbang TIDAK-ATAU (NOR)</option>
+						<option value="XOR">Gerbang XOR</option>
+						<option value="XNOR">Gerbang XNOR</option>
+					</select>
+					<div id="gatePreview" class="w-24 h-16 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg transition-all duration-300 hover:scale-105">
+						DAN
+					</div>
+				</div>
+			</div>
+
+			<!-- Tampilan Hasil -->
+			<div class="mb-8">
+				<label class="block text-gray-700 text-lg font-medium mb-3">Hasil</label>
+				<div id="output" class="text-3xl font-mono bg-gradient-to-r from-gray-900 to-gray-800 text-white p-6 rounded-xl text-center shadow-inner transition-all duration-300">
+					False
+				</div>
+			</div>
+
+			<!-- Tabel Kebenaran Dinamis -->
+			<div class="rounded-xl overflow-hidden border border-gray-200 bg-white/50 backdrop-blur">
+				<div class="bg-gradient-to-r from-gray-100 to-gray-50 p-4 flex justify-between items-center">
+					<span class="text-lg font-medium text-gray-800">Tabel Kebenaran</span>
+					<button id="generateTable" class="group bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2">
+						<svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+						</svg>
+						Generate
+					</button>
+				</div>
+				<div class="max-h-[400px] overflow-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+					<table class="w-full text-sm" id="truthTable">
+						<thead id="tableHeader" class="sticky top-0 bg-white">
+							<!-- Header akan di-generate oleh JavaScript -->
+						</thead>
+						<tbody id="tableBody">
+							<!-- Konten tabel akan di-generate oleh JavaScript -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	/* Style tetap sama */
+</style>
+
+<script>
+	let inputs = [
+		{ id: 'A', value: false },
+		{ id: 'B', value: false }
+	];
+
+	// Fungsi Gerbang Logika
+	const gates = {
+		AND: (values) => values.every(v => v),
+		OR: (values) => values.some(v => v),
+		NOT: (values) => !values[0],
+		NAND: (values) => !values.every(v => v),
+		NOR: (values) => !values.some(v => v),
+		XOR: (values) => values.reduce((a, b) => a !== b),
+		XNOR: (values) => values.reduce((a, b) => a === b)
+	};
+
+	// Generate tabel kebenaran
+	function generateTruthTable() {
+		const tableHeader = document.getElementById('tableHeader');
+		const tableBody = document.getElementById('tableBody');
+		const selectedGate = document.getElementById('gateSelect').value;
+
+		if (!tableHeader || !tableBody) return;
+
+		// Bersihkan tabel yang ada
+		tableHeader.innerHTML = '';
+		tableBody.innerHTML = '';
+
+		// Buat baris header
+		const headerRow = document.createElement('tr');
+		inputs.forEach(input => {
+			const th = document.createElement('th');
+			th.className = 'p-3 border-b bg-gray-50 text-gray-700';
+			th.textContent = input.id;
+			headerRow.appendChild(th);
+		});
+		const outputTh = document.createElement('th');
+		outputTh.className = 'p-3 border-b bg-gray-50 text-gray-700';
+		outputTh.textContent = 'Hasil';
+		headerRow.appendChild(outputTh);
+		tableHeader.appendChild(headerRow);
+
+		// Generate semua kombinasi yang mungkin
+		const totalCombinations = Math.pow(2, inputs.length);
+		
+		for (let i = 0; i < totalCombinations; i++) {
+			const row = document.createElement('tr');
+			row.className = 'hover:bg-purple-50 transition-colors';
+			
+			const combination = [];
+			
+			for (let j = 0; j < inputs.length; j++) {
+				const value = !!(i & (1 << j));
+				combination.push(value);
+				
+				const td = document.createElement('td');
+				td.className = 'p-3 border-b text-center';
+				td.textContent = value ? 'True' : 'False';
+				row.appendChild(td);
+			}
+			
+			const output = gates[selectedGate](combination);
+			const outputTd = document.createElement('td');
+			outputTd.className = 'p-3 border-b text-center font-medium';
+			outputTd.textContent = output ? 'True' : 'False';
+			row.appendChild(outputTd);
+			
+			row.style.animation = `fadeIn 0.2s ease-out ${i * 0.05}s forwards`;
+			
+			tableBody.appendChild(row);
+		}
+	}
+
+	// Event Listeners
+	document.getElementById('addInput')?.addEventListener('click', () => {
+		const newId = String.fromCharCode(65 + inputs.length);
+		inputs.push({ id: newId, value: false });
+		
+		const container = document.getElementById('inputContainer');
+		const newInputGroup = document.createElement('div');
+		newInputGroup.className = 'input-group opacity-0';
+		newInputGroup.innerHTML = `
+			<div class="bg-white/60 backdrop-blur p-4 rounded-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-md">
+				<div class="flex items-center justify-between mb-2">
+					<label class="text-gray-700 font-medium">Input ${newId}</label>
+					<button class="remove-input text-red-500 hover:text-red-700 transition-colors">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+						</svg>
+					</button>
+				</div>
+				<select class="w-full p-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all input-select" data-input-id="${newId}">
+					<option value="false">False</option>
+					<option value="true">True</option>
+				</select>
+			</div>
+		`;
+		container?.appendChild(newInputGroup);
+		
+		requestAnimationFrame(() => {
+			newInputGroup.classList.remove('opacity-0');
+		});
+
+		newInputGroup.querySelector('.remove-input')?.addEventListener('click', () => {
+			newInputGroup.classList.add('opacity-0', 'transform', 'translate-y-4');
+			setTimeout(() => {
+				inputs = inputs.filter(input => input.id !== newId);
+				newInputGroup.remove();
+				generateTruthTable();
+			}, 300);
+		});
+		
+		generateTruthTable();
+	});
+
+	// Handle perubahan pemilihan gerbang
+	document.getElementById('gateSelect')?.addEventListener('change', (e) => {
+		const preview = document.getElementById('gatePreview');
+		if (preview) {
+			preview.classList.add('scale-95', 'opacity-50');
+			setTimeout(() => {
+				// Konversi nama gerbang ke Bahasa Indonesia
+				const gateNames = {
+					'AND': 'DAN',
+					'OR': 'ATAU',
+					'NOT': 'TIDAK',
+					'NAND': 'TIDAK-DAN',
+					'NOR': 'TIDAK-ATAU',
+					'XOR': 'XOR',
+					'XNOR': 'XNOR'
+				};
+				preview.textContent = gateNames[e.target.value];
+				preview.classList.remove('scale-95', 'opacity-50');
+			}, 150);
+		}
+		generateTruthTable();
+		updateOutput();
+	});
+
+	document.getElementById('generateTable')?.addEventListener('click', generateTruthTable);
+
+	document.querySelectorAll('.input-select').forEach(select => {
+		select.addEventListener('change', (e) => {
+			const inputId = e.target.dataset.inputId;
+			const inputIndex = inputs.findIndex(input => input.id === inputId);
+			if (inputIndex !== -1) {
+				inputs[inputIndex].value = e.target.value === 'true';
+			}
+			generateTruthTable();
+			updateOutput();
+		});
+	});
+
+	generateTruthTable();
+	updateOutput();
+
+	function updateOutput() {
+		const outputDiv = document.getElementById('output');
+		const selectedGate = document.getElementById('gateSelect').value;
+		const values = inputs.map(input => input.value);
+		const result = gates[selectedGate](values);
+		
+		if (outputDiv) {
+			outputDiv.textContent = result ? 'True' : 'False';
+			outputDiv.classList.toggle('bg-green-700', result);
+			outputDiv.classList.toggle('bg-gray-900', !result);
+		}
+	}
+</script>
