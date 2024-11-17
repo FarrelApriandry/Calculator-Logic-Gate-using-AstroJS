@@ -19,7 +19,7 @@ Whether you’re a student learning logic gates or a pro who loves tools that *j
 ## 🛠 Getting Started  
 1. **Clone the Repo**:  
    ```bash
-   git clone <repo-url>
+   git clone <git@github.com:FarrelApriandry/Calculator-Logic-Gate-using-AstroJS.git>
 2. **Docker Compose**:
    ```bash
     docker-compose up
